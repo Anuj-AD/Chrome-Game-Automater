@@ -1,0 +1,47 @@
+from PIL import ImageGrab, ImageOps
+import pyautogui
+import time
+from numpy import *
+
+class Coordinates():
+	replayBtn = (480,380)
+	dinosaur = (234, 408) #original value is 387 and new is 405 18pixels lower
+	#xcor to check for obs = 316
+	#ycor for small obs = 410
+	#Dino duc Xcor = 255
+	#Dino duc Ycor = 405
+
+     
+def restartgame():
+	pyautogui.click(Coordinates.replayBtn)
+	pyautogui.keyDown('down')
+
+def pressSpace():
+	pyautogui.keyUp('down')
+	pyautogui.keyDown('space')
+	time.sleep(0.05)
+	print("Jump")
+	pyautogui.keyUp('space')
+	time.sleep(0.05)
+	pyautogui.keyDown('down')
+
+def imageGrab():
+	box = (Coordinates.dinosaur[0]+112,Coordinates.dinosaur[1],
+		Coordinates.dinosaur[0]+142,Coordinates.dinosaur[1]+5)
+	image = ImageGrab.grab(box) 
+	grayImage = ImageOps.grayscale(image)
+	a = array(grayImage.getcolors ())
+	#print(a.sum())
+	return a.sum() 
+ 
+def main():
+	restartgame()
+	while True:
+		if(imageGrab() != 397):
+			pressSpace()
+			time.sleep(0.1)
+
+main()
+
+#while True:
+	#imageGrab()
